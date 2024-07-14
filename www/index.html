@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en" class="fullscreen">
+<link rel="stylesheet" href="style.css">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Our Funky HTML Page</title>
+    <meta name="description" content="Our first page">
+    <meta name="keywords" content="html tutorial template">
+    <meta name="viewport" content="width=device-width">
+    <script>
+        var requestLeft;
+        var requestRight;
+        var ws = new WebSocket("ws");
+        ws.send()
+
+        if (window.XMLHttpRequest) {
+            // for modern browsers
+            requestLeft = new XMLHttpRequest();
+            requestRight = new XMLHttpRequest();
+        } else {
+            // for IE6, IE5
+            requestLeft = new ActiveXObject("Microsoft.XMLHTTP");
+            requestRight = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+        var gamepad;
+        window.addEventListener("gamepadconnected", (event) => {
+            const gamepad = event.gamepad;
+            console.log("Gamepad connected:", gamepad.id);
+        });
+        window.addEventListener("gamepaddisconnected", (event) => {
+            const gamepad = event.gamepad;
+            console.log("Gamepad disconnected:", gamepad.id);
+        });
+
+        var left=0;
+        var right=0;
+        var button0=false;
+        var button1=false;
+        function handleGamepadInput() {
+            const gamepads = navigator.getGamepads();
+            for (const gamepad of gamepads) {
+                if (gamepad) {
+                    var leftaxis = +gamepad.axes[1].toFixed(2);
+                    if (leftaxis != left) {
+                        left=leftaxis;
+                        console.log(leftaxis)
+                        // requestLeft.open('GET', "/lefttrack?speed="+(-leftaxis));
+                        // requestLeft.send(null);
+
+                    }
+
+
+                    var rightaxis = +gamepad.axes[3].toFixed(2);
+                    if (rightaxis != right) {
+                        right=rightaxis;
+                        console.log(rightaxis)
+                        // requestLeft.open('GET', "/righttrack?speed="+(-rightaxis));
+                        // requestLeft.send(null);
+
+                    }
+
+                    var b0 = gamepad.buttons[0];
+                    if (!button0 && b0) {
+                        console.log("Button 0 press");
+                        button0 = true;
+                    }
+                    if (button0 && !b0) {
+                        console.log("Button 0 release");
+                        button0 = false;
+                    }
+                    var b1 = gamepad.buttons[1];
+                    if (!button1 && b1) {
+                        console.log("Button 1 press");
+                        button1 = true;
+                    }
+                    if (button1 && !b1) {
+                        console.log("Button 1 release");
+                        button1 = false;
+                    }
+               }
+            }
+        }
+        setInterval(handleGamepadInput, 200);
+    </script>
+</head>
+
+<body class="fullscreen">
+    <img  class="fullscreen" alt="Camera Feed" src="http://192.168.1.69:81/">
+</body>
+
+</html>
